@@ -7,6 +7,7 @@ interface IDataContext {
     clinicians: Clinician[];
     patients: Patient[];
     appointments: Appointment[];
+    setAppointments: React.Dispatch<React.SetStateAction<Appointment[]>>;
     setAvailabilities: React.Dispatch<React.SetStateAction<Availability[]>>;
     availabilities: Availability[];
     fetchingData: boolean;
@@ -59,7 +60,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         <DataContext.Provider value={{
             clinicians, patients, appointments, availabilities,
             fetchingData,
-            setAvailabilities
+            setAvailabilities, setAppointments
         }}>
             {children}
         </DataContext.Provider>
