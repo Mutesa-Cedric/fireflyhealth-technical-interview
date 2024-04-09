@@ -1,10 +1,13 @@
 import React from "react";
 import { AppBar, Box, CssBaseline } from "@mui/material";
-
+import Devider from "@mui/material/Divider";
 import logo from "./logo.svg";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import Sidebar from "./components/sidebar";
 
 export const Root: React.FC = () => {
+  const location = useLocation();
+
   return (
     <>
       <CssBaseline />
@@ -14,7 +17,15 @@ export const Root: React.FC = () => {
         </Box>
       </AppBar>
       <Box m={2}>
-        <Outlet />
+        {
+          location.pathname.includes("appointments") ?
+            <Box minHeight={"90vh"} display={"flex"} flexDirection={"row"}>
+              <Sidebar />
+              <Devider orientation={"vertical"} flexItem />
+              <Outlet />
+            </Box> :
+            <Outlet />
+        }
       </Box>
     </>
   );
