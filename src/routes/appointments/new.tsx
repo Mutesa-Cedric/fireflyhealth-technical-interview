@@ -21,10 +21,11 @@ export const AppointmentsNew: React.FC = () => {
           },
         }}
       >
-
+        {/* showing all availabilities that are not booked */}
         {availabilities.filter(availability => {
           return !appointments.some(appointment => appointment.availability_id === availability.id)
         }).length > 0 ?
+          // filter availabilities that are not booked
           availabilities.filter(availability => {
             return !appointments.some(appointment => appointment.availability_id === availability.id)
           }).map(availability => (
@@ -48,11 +49,15 @@ const AppointmentCard = ({ availability }: { availability: Availability }) => {
   const { patients, clinicians, setAvailabilities } = useData();
   const [selectedPatient, setSelectedPatient] = useState(patients[0].id);
   const [creatingAppointment, setCreatingAppointment] = useState(false);
+
+  // showing notifications to the user after a successful or failed operation
   const [showSnackbar, setShowSnackbar] = useState<{
     show: boolean;
     message: string;
     severity: "success" | "error" | "warning" | "info"
   } | null>();
+
+  // a function for creating an appointment for a given availability and a selected patient
   const createAppointment = async () => {
     setCreatingAppointment(true);
     try {
@@ -107,6 +112,8 @@ const AppointmentCard = ({ availability }: { availability: Availability }) => {
       </Box>
 
       <Box mt={"24px"}>
+
+        {/* choosing which patient to create the reservation for */}
         <FormControl fullWidth>
           <InputLabel variant="standard" htmlFor="uncontrolled-native">
             Choose Patient
@@ -126,6 +133,8 @@ const AppointmentCard = ({ availability }: { availability: Availability }) => {
             }
           </NativeSelect>
         </FormControl>
+
+        {/* showing which clinician you are creating an appointment for */}
         <FormControl fullWidth
           sx={{
             marginTop: "20px"
@@ -141,6 +150,8 @@ const AppointmentCard = ({ availability }: { availability: Availability }) => {
               id: 'uncontrolled-native',
             }}
           >
+
+            {/* only one option since the availability is associated to a single clinician */}
             <option
               value={clinicians.find(clinician => clinician.id === availability.clinician_id)?.id}
             >
@@ -165,6 +176,7 @@ const AppointmentCard = ({ availability }: { availability: Availability }) => {
         Book
       </Button>
 
+      {/* showing notification to the user after successful or failed operation */}
       <Snackbar open={Boolean(showSnackbar?.show)} autoHideDuration={6000} onClose={() => setShowSnackbar(null)}>
         <Alert
           onClose={() => setShowSnackbar(null)}

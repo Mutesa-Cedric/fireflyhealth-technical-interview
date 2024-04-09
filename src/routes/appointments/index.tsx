@@ -132,12 +132,15 @@ export const AppointmentsIndex: React.FC = () => {
 const AppointmentCard = ({ appointment }: { appointment: Appointment }) => {
   const { clinicians, patients, setAppointments } = useData();
   const [cancellingAppointment, setCancellingAppointment] = useState(false);
+
+  // showing notifications to the user after a successful or failed operation
   const [showSnackbar, setShowSnackbar] = useState<{
     show: boolean;
     message: string;
     severity: "success" | "error" | "warning" | "info"
   } | null>();
 
+  // a function for cancelling an appointment
   const cancelAppointment = async () => {
     setCancellingAppointment(true);
     try {
@@ -191,6 +194,7 @@ const AppointmentCard = ({ appointment }: { appointment: Appointment }) => {
               variant="subtitle2"
               color="#777777"
             >
+              {/* format dates */}
               {new Date(appointment.start).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })} - {new Date(new Date(appointment.start).getTime() + 30 * 60000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
             </Typography>
           </Box>
@@ -199,9 +203,11 @@ const AppointmentCard = ({ appointment }: { appointment: Appointment }) => {
         {/* clinician and patient */}
         <Box mt={"24px"}>
           <Typography variant="subtitle1">
+            {/* find the clinician associated with this appointment */}
             Clinician: {clinicians.find(clinician => clinician.id === appointment.clinician_id)?.first_name} {clinicians.find(clinician => clinician.id === appointment.clinician_id)?.last_name}
           </Typography>
           <Typography variant="subtitle1">
+            {/* find patient associated with this appointment */}
             Patient: {patients.find(patient => patient.id === appointment.patient_id)?.first_name} {patients.find(patient => patient.id === appointment.patient_id)?.last_name}
           </Typography>
         </Box>
@@ -221,6 +227,7 @@ const AppointmentCard = ({ appointment }: { appointment: Appointment }) => {
         </Button>
       </Card>
 
+      {/* notify the user for successful or failed results */}
       <Snackbar open={Boolean(showSnackbar?.show)} autoHideDuration={6000} onClose={() => setShowSnackbar(null)}>
         <Alert
           onClose={() => setShowSnackbar(null)}
