@@ -7,6 +7,7 @@ import { Root } from "./Root";
 import { Intro } from "./routes/index";
 import { AppointmentsIndex } from "./routes/appointments/index";
 import { AppointmentsNew } from "./routes/appointments/new";
+import { DataProvider } from "./hooks/useData";
 
 const THEME = createTheme({
   palette: {
@@ -18,13 +19,15 @@ const THEME = createTheme({
 export const App: React.FC = () => (
   <ThemeProvider theme={THEME}>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Root />}>
-          <Route path="/" element={<Intro />} />
-          <Route path="/appointments" element={<AppointmentsIndex />} />
-          <Route path="/appointments/new" element={<AppointmentsNew />} />
-        </Route>
-      </Routes>
+      <DataProvider>
+        <Routes>
+          <Route path="/" element={<Root />}>
+            <Route path="/" element={<Intro />} />
+            <Route path="/appointments" element={<AppointmentsIndex />} />
+            <Route path="/appointments/new" element={<AppointmentsNew />} />
+          </Route>
+        </Routes>
+      </DataProvider>
     </BrowserRouter>
   </ThemeProvider>
 );

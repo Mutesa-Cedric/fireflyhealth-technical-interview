@@ -28,7 +28,15 @@ const PATIENTS: Omit<Patient, "id">[] = [
 
 const THIRTY_MINUTES = 1000 * 60 * 30;
 
+async function clear() {
+  await prisma.appointment.deleteMany();
+  await prisma.availability.deleteMany();
+  await prisma.patient.deleteMany();
+  await prisma.clinician.deleteMany();
+}
+
 async function seed() {
+  await clear();
   const clinicians = await prisma.clinician.findMany();
   for (const clinician of CLINICIANS) {
     if (!clinicians.find((c) => c.first_name === clinician.first_name)) {

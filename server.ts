@@ -2,7 +2,7 @@ import express from "express";
 import compression from "compression";
 import morgan from "morgan";
 import { PrismaClient } from "@prisma/client";
-
+import cors from "cors";
 const prisma = new PrismaClient();
 
 const app = express();
@@ -12,6 +12,8 @@ app.disable("x-powered-by");
 app.use(compression());
 app.use(morgan("tiny"));
 app.use(express.json());
+app.use(cors());
+
 
 function resource(
   url: string,
@@ -36,7 +38,7 @@ function resource(
   app.get(url + "/:id", async (req, res) => {
     try {
       const record = await model.findUnique({
-        where: { id: req.params.id },
+        where: { id: parseInt(req.params.id) },
         rejectOnNotFound: true,
       });
       res.json(record);
@@ -67,7 +69,7 @@ function resource(
   app.put(url + "/:id", async (req, res) => {
     try {
       const record = await model.update({
-        where: { id: req.params.id },
+        where: { id: parseInt(req.params.id) },
         data: req.body,
       });
       res.json(record);
@@ -80,7 +82,7 @@ function resource(
   app.delete(url + "/:id", async (req, res) => {
     try {
       await model.delete({
-        where: { id: req.params.id },
+        where: { id: parseInt(req.params.id) },
         rejectOnNotFound: true,
       });
       res.json("ok");
