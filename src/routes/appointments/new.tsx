@@ -22,12 +22,21 @@ export const AppointmentsNew: React.FC = () => {
         }}
       >
 
-        {
+        {availabilities.filter(availability => {
+          return !appointments.some(appointment => appointment.availability_id === availability.id)
+        }).length > 0 ?
           availabilities.filter(availability => {
             return !appointments.some(appointment => appointment.availability_id === availability.id)
           }).map(availability => (
             <AppointmentCard key={availability.id} availability={availability} />
-          ))
+          )) :
+          <Card
+            sx={{
+              padding: 12
+            }}
+          >
+            No Availabilities
+          </Card>
         }
       </Box>
     </Box >

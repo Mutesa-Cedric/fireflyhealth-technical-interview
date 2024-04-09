@@ -1,8 +1,8 @@
-import { Alert, Avatar, Box, Button, Card, Divider, Grid, List, ListItem, Snackbar, Typography } from "@mui/material";
+import { CalendarToday } from "@mui/icons-material";
+import { Alert, Avatar, Box, Button, Card, Divider, Grid, Snackbar, Typography } from "@mui/material";
+import type { Appointment } from "@prisma/client";
 import React, { useState } from "react";
 import useData from "../../hooks/useData";
-import { CalendarToday } from "@mui/icons-material";
-import type { Appointment } from "@prisma/client";
 import axios from "../../lib/axios.config";
 
 
@@ -16,66 +16,78 @@ export const AppointmentsIndex: React.FC = () => {
         fetchingData ?
           <Typography>Loading...</Typography> :
           <Box display={"flex"} flexDirection={"row"}>
-            <Box p={"8px"}></Box>
-            <Box p={"8px"}>
 
+            <Box p={"8px"} px={2.5} display={"flex"} flexDirection={"column"} gap={5}>
               {/* clinicians */}
               <Box>
-                <Typography variant="h6">Clinicians</Typography>
-                <List sx={{
-                  listStyleType: 'disc',
-                  pl: 2,
-                }}>
+                <Typography variant="h6" paddingBottom={1}>Clinicians</Typography>
+                <Box display={"flex"} flexDirection={"column"} gap={1}>
                   {clinicians.map(clinician => (
-                    <ListItem
-                      sx={{
-                        textDecoration: 'underline',
-                        color: "#1976d2"
-                      }}
-                      key={clinician.id}>{clinician.first_name} {clinician.last_name}</ListItem>
+                    <Box key={clinician.id}
+                      display={"flex"} alignItems={"center"} gap={2}
+                    >
+                      <Box border={2.5} borderRadius={"100%"} height={"100%"} padding={.5} borderColor={"primary.main"} />
+                      <Typography
+                        sx={{
+                          textDecoration: 'underline',
+                          color: "#1976d2"
+                        }}
+                      >{clinician.first_name} {clinician.last_name}</Typography>
+                    </Box>
+
                   ))}
-                </List>
+                </Box>
               </Box>
 
               {/* dates */}
               <Box>
-                <Typography variant="h6">Dates</Typography>
-                <List sx={{
-                  listStyleType: 'disc',
-                  pl: 2,
-                }}>
+                <Typography variant="h6" paddingBottom={1}>Dates</Typography>
+                <Box display={"flex"} flexDirection={"column"} gap={1}>
                   {availabilities.map(availability => (
-                    <ListItem
-                      sx={{
-                        textDecoration: 'underline',
-                        color: "#1976d2"
-                      }}
-                      key={availability.id}> {new Date(availability.start).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })},
-                      {new Date(availability.start).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</ListItem>
+                    <Box
+                      key={availability.id}
+                      display={"flex"} gap={2}
+                    >
+                      <Box border={2.5} borderRadius={"100%"} height={"100%"} padding={.5} borderColor={"primary.main"} />
+                      <Typography
+                        sx={{
+                          textDecoration: 'underline',
+                          color: "#1976d2"
+                        }}
+                      >
+                        {new Date(availability.start).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })},
+                        {new Date(availability.start).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                      </Typography>
+                    </Box>
                   ))}
-                </List>
+                </Box>
               </Box>
 
               {/* patients */}
               <Box>
-                <Typography variant="h6">Patients</Typography>
-                <List sx={{
-                  listStyleType: 'disc',
-                  pl: 2,
-                }}>
+                <Typography variant="h6" paddingBottom={1}>Patients</Typography>
+                <Box display={"flex"} flexDirection={"column"} gap={1}>
                   {patients.map(patient => (
-                    <ListItem
-                      sx={{
-                        textDecoration: 'underline',
-                        color: "#1976d2"
-                      }}
-                      key={patient.id}>{patient.first_name} {patient.last_name}</ListItem>
+                    <Box key={patient.id}
+                      display={"flex"} alignItems={"center"} gap={2}
+                    >
+                      <Box border={2.5} borderRadius={"100%"} height={"100%"} padding={.5} borderColor={"primary.main"} />
+                      <Typography
+                        sx={{
+                          textDecoration: 'underline',
+                          color: "#1976d2"
+                        }}
+                      >{patient.first_name} {patient.last_name}</Typography>
+                    </Box>
                   ))}
-                </List>
+                </Box>
               </Box>
             </Box>
 
-            <Divider orientation="vertical" flexItem />
+            <Divider orientation={"vertical"} flexItem sx={{
+              backgroundColor: "#e0e0e0",
+              width: 2,
+            }} />
 
             {/* all appointments */}
             <Box pl={"24px"} pt={"8px"}>
@@ -110,7 +122,7 @@ export const AppointmentsIndex: React.FC = () => {
               }
             </Box>
 
-          </Box>
+          </Box >
       }
     </>
   )

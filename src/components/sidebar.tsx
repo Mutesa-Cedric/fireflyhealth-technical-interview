@@ -31,6 +31,9 @@ const Sidebar = () => {
                     href={link.href}
                     underline='always'
                     color={location.pathname === link.href ? 'primary' : 'inherit'}
+                    sx={{
+                        opacity: location.pathname === link.href ? 1 : 0.7,
+                    }}
                     display={'flex'} alignItems={'center'} p={1}
                 >
                     <link.icon />

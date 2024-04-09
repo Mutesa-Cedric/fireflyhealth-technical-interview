@@ -1,6 +1,6 @@
 import React from "react";
 import { AppBar, Box, CssBaseline } from "@mui/material";
-import Devider from "@mui/material/Divider";
+import Divider from "@mui/material/Divider";
 import logo from "./logo.svg";
 import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./components/sidebar";
@@ -21,13 +21,21 @@ export const Root: React.FC = () => {
           <img src={logo} alt="Logo" height={30} />
         </Box>
       </AppBar>
-      <Devider />
+      <Divider
+        sx={{
+          backgroundColor: "#e0e0e0",
+          height: 2,
+        }}
+      />
       <Box m={2} mt={0}>
         {
           location.pathname.includes("appointments") ?
-            <Box minHeight={"90vh"} display={"flex"} flexDirection={"row"}>
+            <Box minHeight={"92vh"} display={"flex"} flexDirection={"row"}>
               <Sidebar />
-              <Devider orientation={"vertical"} flexItem />
+              <Divider orientation={"vertical"} flexItem sx={{
+                backgroundColor: "#e0e0e0",
+                width: 2,
+              }} />
               <Outlet />
             </Box> :
             <Outlet />
