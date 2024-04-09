@@ -11,12 +11,18 @@ export const Root: React.FC = () => {
   return (
     <>
       <CssBaseline />
-      <AppBar position="sticky">
+      <AppBar position="sticky"
+        sx={{
+          boxShadow: "none",
+          backgroundColor: "white"
+        }}
+      >
         <Box m={2} mb={1.75}>
           <img src={logo} alt="Logo" height={30} />
         </Box>
       </AppBar>
-      <Box m={2}>
+      <Devider />
+      <Box m={2} mt={0}>
         {
           location.pathname.includes("appointments") ?
             <Box minHeight={"90vh"} display={"flex"} flexDirection={"row"}>

@@ -29,7 +29,7 @@ const Sidebar = () => {
                 <Link
                     key={index}
                     href={link.href}
-                    underline={location.pathname === link.href ? 'always' : 'hover'}
+                    underline='always'
                     color={location.pathname === link.href ? 'primary' : 'inherit'}
                     display={'flex'} alignItems={'center'} p={1}
                 >
