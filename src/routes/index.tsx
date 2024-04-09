@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export const Intro: React.FC = () => {
   return (
@@ -29,6 +30,16 @@ export const Intro: React.FC = () => {
           </Typography>
         </ul>
       </Box>
+
+      <Link to="/appointments">
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2 }}
+        >
+          Go to Appointments &rarr;
+        </Button>
+      </Link>
     </>
   );
 };

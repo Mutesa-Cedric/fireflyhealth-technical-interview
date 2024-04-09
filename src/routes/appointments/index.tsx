@@ -1,13 +1,51 @@
 import { CalendarToday } from "@mui/icons-material";
-import { Alert, Avatar, Box, Button, Card, Divider, Grid, Snackbar, Typography } from "@mui/material";
+import { Alert, Avatar, Box, Button, Card, Divider, Grid, Radio, Snackbar, Typography } from "@mui/material";
 import type { Appointment } from "@prisma/client";
-import React, { useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import useData from "../../hooks/useData";
 import axios from "../../lib/axios.config";
 
 
 export const AppointmentsIndex: React.FC = () => {
   const { fetchingData, clinicians, availabilities, patients, appointments } = useData();
+  const [filteredAppointments, setFilteredAppointments] = useState<Appointment[]>(appointments);
+  const [selectedClinicians, setSelectedClinicians] = useState<number[]>([]);
+  const [selectedPatients, setSelectedPatients] = useState<number[]>([]);
+  const [selectedAvailabilityGroups, setSelectedAvailabilityGroups] = useState<{
+    id: string;
+    start: string;
+  }[]>([]);
+
+  // group availabilities by day
+  const groupedAvailabilities = useMemo(() => {
+    return availabilities.reduce((acc, availability) => {
+      const date = new Date(availability.start).toLocaleDateString();
+      if (!acc.find(group => group.id === date)) {
+        acc.push({
+          id: date,
+          start: new Date(availability.start).toISOString()
+        });
+      }
+      return acc;
+    }, [] as { id: string, start: string }[]);
+  }, [availabilities]);
+
+
+  // filter appointments based on selected filters
+  useEffect(() => {
+    setFilteredAppointments(appointments.filter(appointment => {
+      if (selectedClinicians.length > 0 && !selectedClinicians.includes(appointment.clinician_id)) {
+        return false;
+      }
+      if (selectedPatients.length > 0 && !selectedPatients.includes(appointment.patient_id)) {
+        return false;
+      }
+      if (selectedAvailabilityGroups.length > 0 && !selectedAvailabilityGroups.find(group => new Date(appointment.start).toLocaleDateString() === group.id)) {
+        return false;
+      }
+      return true;
+    }));
+  }, [selectedClinicians, selectedPatients, selectedAvailabilityGroups, appointments]);
 
   return (
     <>
@@ -24,9 +62,21 @@ export const AppointmentsIndex: React.FC = () => {
                 <Box display={"flex"} flexDirection={"column"} gap={1}>
                   {clinicians.map(clinician => (
                     <Box key={clinician.id}
-                      display={"flex"} alignItems={"center"} gap={2}
+                      display={"flex"} alignItems={"center"}
                     >
-                      <Box border={2.5} borderRadius={"100%"} height={"100%"} padding={.5} borderColor={"primary.main"} />
+                      <Radio
+                        checked={selectedClinicians.includes(clinician.id)}
+                        onClick={() => {
+                          if (selectedClinicians.includes(clinician.id)) {
+                            setSelectedClinicians(selectedClinicians.filter(id => id !== clinician.id));
+                          } else {
+                            setSelectedClinicians([...selectedClinicians, clinician.id]);
+                          }
+                        }}
+                        value={clinician.id}
+                        name="clinician"
+                        inputProps={{ 'aria-label': clinician.id.toString() }}
+                      />
                       <Typography
                         sx={{
                           textDecoration: 'underline',
@@ -43,21 +93,32 @@ export const AppointmentsIndex: React.FC = () => {
               <Box>
                 <Typography variant="h6" paddingBottom={1}>Dates</Typography>
                 <Box display={"flex"} flexDirection={"column"} gap={1}>
-                  {availabilities.map(availability => (
-                    <Box
-                      key={availability.id}
-                      display={"flex"} gap={2}
+                  {groupedAvailabilities.map(availability => (
+                    <Box key={availability.id}
+                      display={"flex"} alignItems={"center"}
                     >
-                      <Box border={2.5} borderRadius={"100%"} height={"100%"} padding={.5} borderColor={"primary.main"} />
+                      <Radio
+                        checked={selectedAvailabilityGroups.map(group => group.id).includes(availability.id)}
+                        onClick={() => {
+                          if (selectedAvailabilityGroups.map(group => group.id).includes(availability.id)) {
+                            setSelectedAvailabilityGroups(selectedAvailabilityGroups.filter(group => group.id !== availability.id));
+                          } else {
+                            setSelectedAvailabilityGroups([...selectedAvailabilityGroups, availability]);
+                          }
+                        }}
+                        value={availability.id}
+                        name="availability"
+                        inputProps={{ 'aria-label': availability.id.toString() }}
+                      />
                       <Typography
                         sx={{
                           textDecoration: 'underline',
                           color: "#1976d2"
                         }}
-                      >
-                        {new Date(availability.start).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })},
-                        {new Date(availability.start).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-                      </Typography>
+                      >{
+                          // display in format : Tuesday, 12 October
+                          new Date(availability.start).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+                        }</Typography>
                     </Box>
                   ))}
                 </Box>
@@ -69,9 +130,21 @@ export const AppointmentsIndex: React.FC = () => {
                 <Box display={"flex"} flexDirection={"column"} gap={1}>
                   {patients.map(patient => (
                     <Box key={patient.id}
-                      display={"flex"} alignItems={"center"} gap={2}
+                      display={"flex"} alignItems={"center"}
                     >
-                      <Box border={2.5} borderRadius={"100%"} height={"100%"} padding={.5} borderColor={"primary.main"} />
+                      <Radio
+                        checked={selectedPatients.includes(patient.id)}
+                        onClick={() => {
+                          if (selectedPatients.includes(patient.id)) {
+                            setSelectedPatients(selectedPatients.filter(id => id !== patient.id));
+                          } else {
+                            setSelectedPatients([...selectedPatients, patient.id]);
+                          }
+                        }}
+                        value={patient.id}
+                        name="patient"
+                        inputProps={{ 'aria-label': patient.id.toString() }}
+                      />
                       <Typography
                         sx={{
                           textDecoration: 'underline',
@@ -105,7 +178,7 @@ export const AppointmentsIndex: React.FC = () => {
                     }}
                   >
                     {
-                      appointments.map(appointment => (
+                      filteredAppointments.map(appointment => (
                         <AppointmentCard key={appointment.id} appointment={appointment} />
                       ))
                     }

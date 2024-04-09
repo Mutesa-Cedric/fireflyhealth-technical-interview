@@ -4,25 +4,25 @@ const prisma = new PrismaClient();
 
 const CLINICIANS: Omit<Clinician, "id">[] = [
   {
-    first_name: "Karl",
-    last_name: "Clinician",
-    national_provider_number: "12345",
+    first_name: "James",
+    last_name: "Timothy",
+    national_provider_number: "89234",
   },
   {
-    first_name: "Amanda",
-    last_name: "Clinician",
-    national_provider_number: "22345",
+    first_name: "Kaylie",
+    last_name: "Jefferson",
+    national_provider_number: "10934",
   },
 ];
 
 const PATIENTS: Omit<Patient, "id">[] = [
   {
-    first_name: "Wesley",
-    last_name: "Crusher",
+    first_name: "Tanner",
+    last_name: "Lensley",
   },
   {
-    first_name: "Leonard",
-    last_name: "McCoy",
+    first_name: "John",
+    last_name: "Doe",
   },
 ];
 
@@ -40,10 +40,11 @@ async function seed() {
   const clinicians = await prisma.clinician.findMany();
   for (const clinician of CLINICIANS) {
     if (!clinicians.find((c) => c.first_name === clinician.first_name)) {
+      const ONE_DAY = 1000 * 60 * 60 * 24;
       const times = [
-        Date.now(),
-        Date.now() + THIRTY_MINUTES,
-        Date.now() + THIRTY_MINUTES + THIRTY_MINUTES,
+        Date.now() + ONE_DAY,
+        Date.now() + ONE_DAY + THIRTY_MINUTES,
+        Date.now() + ONE_DAY + THIRTY_MINUTES + THIRTY_MINUTES,
       ];
 
       await prisma.clinician.create({
