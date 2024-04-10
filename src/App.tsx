@@ -19,7 +19,7 @@ const THEME = createTheme({
 export const App: React.FC = () => (
   <ThemeProvider theme={THEME}>
     <BrowserRouter>
-      <DataProvider>
+      <DataProvider> 
         <Routes>
           <Route path="/" element={<Root />}>
             <Route path="/" element={<Intro />} />

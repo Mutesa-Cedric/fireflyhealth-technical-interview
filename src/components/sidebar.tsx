@@ -1,7 +1,6 @@
-import React from 'react'
 import { CalendarToday, ControlPoint } from '@mui/icons-material';
-import { useLocation } from 'react-router-dom';
 import { Box, Link } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 
 const sidebarLinks = [
     {

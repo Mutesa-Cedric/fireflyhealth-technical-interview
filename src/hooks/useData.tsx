@@ -1,3 +1,8 @@
+// this file is used to create a context for the data that is fetched from the server
+// it is used to provide the data to the components that need it
+// it also provides a hook to access the data
+// as a summary, all data fetching is done here and exported for use in all other components
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { Clinician, Patient, Appointment, Availability } from "@prisma/client"
 import axios from '../lib/axios.config';
@@ -17,12 +22,15 @@ const DataContext = createContext<IDataContext | undefined>(undefined);
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
 
+    // state to store the data fetched from the server
     const [clinicians, setClinicians] = useState<Clinician[]>([]);
     const [patients, setPatients] = useState<Patient[]>([]);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [availabilities, setAvailabilities] = useState<Availability[]>([]);
     const [fetchingData, setFetchingData] = useState(true);
 
+
+    // fetch all data from the server and store it in the state
     useEffect(() => {
         const fetchClinicians = async () => {
             const response = await axios.get<Clinician[]>("/clinicians");
@@ -44,6 +52,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             setAvailabilities(response.data);
         };
 
+        // execute all the fetch functions in parallel
         const fetchData = async () => {
             await Promise.all([
                 fetchClinicians(),
@@ -57,6 +66,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         fetchData();
     }, []);
     return (
+        // provide the data to the children
         <DataContext.Provider value={{
             clinicians, patients, appointments, availabilities,
             fetchingData,
@@ -68,6 +78,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 }
 
 
+// hook to access the data from outside this file
 export default function useData() {
     const context = useContext(DataContext);
     if (!context) {

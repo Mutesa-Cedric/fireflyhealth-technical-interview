@@ -29,6 +29,7 @@ export const Root: React.FC = () => {
       />
       <Box m={2} mt={0}>
         {
+          // if the user is on the appointments page, show the sidebar
           location.pathname.includes("appointments") ?
             <Box minHeight={"92vh"} display={"flex"} flexDirection={"row"}>
               <Sidebar />

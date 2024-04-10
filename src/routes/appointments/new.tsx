@@ -74,6 +74,7 @@ const AppointmentCard = ({ availability }: { availability: Availability }) => {
         severity: "success"
       });
 
+      // remove the availability from the list after creating the appointment
       setTimeout(() => {
         setAvailabilities((prev) => prev.filter(avail => avail.id !== availability.id));
       }, 3000);

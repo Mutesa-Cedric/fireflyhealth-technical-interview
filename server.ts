@@ -12,7 +12,7 @@ app.disable("x-powered-by");
 app.use(compression());
 app.use(morgan("tiny"));
 app.use(express.json());
-app.use(cors());
+app.use(cors()); // for cross-origin requests
 
 
 function resource(
@@ -35,6 +35,7 @@ function resource(
     }
   });
 
+  // all ids have to be converted to integers first
   app.get(url + "/:id", async (req, res) => {
     try {
       const record = await model.findUnique({

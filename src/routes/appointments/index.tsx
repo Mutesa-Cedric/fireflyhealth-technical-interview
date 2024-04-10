@@ -56,7 +56,7 @@ export const AppointmentsIndex: React.FC = () => {
           <Box display={"flex"} flexDirection={"row"}>
 
             <Box p={"8px"} px={2.5} display={"flex"} flexDirection={"column"} gap={5}>
-              {/* clinicians */}
+              {/* clinicians available */}
               <Box>
                 <Typography variant="h6" paddingBottom={1}>Clinicians</Typography>
                 <Box display={"flex"} flexDirection={"column"} gap={1}>
@@ -89,7 +89,7 @@ export const AppointmentsIndex: React.FC = () => {
                 </Box>
               </Box>
 
-              {/* dates */}
+              {/* date groups */}
               <Box>
                 <Typography variant="h6" paddingBottom={1}>Dates</Typography>
                 <Box display={"flex"} flexDirection={"column"} gap={1}>
@@ -124,7 +124,7 @@ export const AppointmentsIndex: React.FC = () => {
                 </Box>
               </Box>
 
-              {/* patients */}
+              {/* patients available */}
               <Box>
                 <Typography variant="h6" paddingBottom={1}>Patients</Typography>
                 <Box display={"flex"} flexDirection={"column"} gap={1}>
@@ -162,7 +162,7 @@ export const AppointmentsIndex: React.FC = () => {
               width: 2,
             }} />
 
-            {/* all appointments */}
+            {/* showing filtered appointments */}
             <Box pl={"24px"} pt={"8px"}>
               <Typography variant="h4">All Appointments</Typography>
               {
@@ -223,6 +223,7 @@ const AppointmentCard = ({ appointment }: { appointment: Appointment }) => {
         message: "Appointment cancelled successfully",
         severity: "success"
       });
+      // remove the appointment from the list after 3 seconds
       setTimeout(() => {
         setAppointments((prev) => prev.filter(app => app.id !== appointment.id));
       }, 3000);
@@ -267,13 +268,13 @@ const AppointmentCard = ({ appointment }: { appointment: Appointment }) => {
               variant="subtitle2"
               color="#777777"
             >
-              {/* format dates */}
+              {/* format dates*/}
               {new Date(appointment.start).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })} - {new Date(new Date(appointment.start).getTime() + 30 * 60000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
             </Typography>
           </Box>
         </Box>
 
-        {/* clinician and patient */}
+        {/* clinician and patient details */}
         <Box mt={"24px"}>
           <Typography variant="subtitle1">
             {/* find the clinician associated with this appointment */}
